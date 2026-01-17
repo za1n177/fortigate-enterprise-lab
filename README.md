@@ -1,94 +1,106 @@
-🔐 FortiGate Enterprise Lab (Virtualized)
+🔐 FortiGate Enterprise Firewall Lab (Virtual)
 📌 Overview
 
-This project demonstrates a full FortiGate enterprise firewall deployment in a virtualized lab environment using FortiGate-VM + Ubuntu Server + VirtualBox.
+This project demonstrates a full FortiGate enterprise firewall deployment in a virtualized lab using FortiGate-VM, Ubuntu Server, and VirtualBox.
 
-The lab focuses on real-world firewall fundamentals:
+The lab focuses on real-world firewall fundamentals, including:
 
-Interface design (WAN / LAN separation)
+WAN / LAN interface design
 
 Routing and NAT
 
-Secure management access (SSH)
-
 Linux client integration
 
-Troubleshooting and validation
+Secure management access (SSH)
 
-The goal is not just to “make it work”, but to implement secure, production-aligned firewall practices.
+Troubleshooting connectivity issues
 
-🏗️ Lab Architecture
-High-Level Design
-Windows Host
-│
-├── VirtualBox NAT (Internet)
-│       │
-│   Ubuntu Server
-│   - enp0s3 (NAT / 10.0.2.0/24)
-│   - enp0s8 (LAN / 192.168.56.0/24)
-│       │
-│   FortiGate-VM
-│   - port1 (WAN / DHCP)
-│   - port2 (LAN / 192.168.56.1)
+This lab was built and validated step-by-step, with evidence-based screenshots for every phase.
 
+🏗️ Lab Architecture (Logical View)
+[ Windows Host ]
+        |
+        |  (VirtualBox NAT / Port Forwarding)
+        |
+[ Ubuntu Server ]
+- enp0s3 : NAT (10.0.2.0/24)
+- enp0s8 : LAN (192.168.56.10/24)
+        |
+        |  (LAN Segment)
+        |
+[ FortiGate-VM ]
+- port1 : WAN (DHCP)
+- port2 : LAN (192.168.56.1/24)
 
-📷 Diagram: architecture/network-diagram.png
-
-⚙️ Lab Components
+⚙️ Environment
 
 Firewall: FortiGate-VM64 (Free / Evaluation Mode)
 
-Client: Ubuntu Server (Netplan-based networking)
+Client: Ubuntu Server (Netplan)
 
-Host: Windows 10/11
+Host OS: Windows
 
 Hypervisor: Oracle VirtualBox
 
-Access: Console, SSH, NAT Port Forwarding
+Management: Console & SSH
 
-🧪 Phase Breakdown
-🔹 Phase 1 – Initial Setup
-Objectives
+🧪 Phase 1 – Initial Setup & System Readiness
+🎯 Objectives
 
-Import FortiGate OVA
+Validate FortiGate VM import and system resources
 
-Resolve console display issues
+Verify VirtualBox network adapter configuration
 
-Perform first login and baseline checks
+Perform first successful console login
 
-Key Tasks
+Prepare system with updates and basic tools
 
-FortiGate-VM imported into VirtualBox
+Confirm internet and DNS functionality
 
-Display adapter adjusted to VMSVGA to restore console visibility
+🔧 Key Actions Performed
 
-Initial admin login and password setup
+Verified FortiGate-VM hardware allocation and boot readiness
 
-Verified system status and resources
+Reviewed and confirmed VirtualBox network adapters
 
-📁 Evidence:
+Successfully logged in via FortiGate console
 
+Updated system and verified firmware stability
+
+Installed essential utilities for administration
+
+Confirmed internet access and DNS resolution
+
+📁 Evidence
 phase-1-setup/
-├── P1-01-fgt-import.png
-├── P1-02-console-login.png
+├── P1-01-vm-summary.png              # VM hardware & system overview
+├── P1-02-network-adapters.png        # VirtualBox adapter configuration
+├── P1-03-first-login-success.png     # Successful console login
+├── P1-04-system-updated.png          # System update confirmation
+├── P1-05-basic-tools-installed.png   # Essential tools ready
+├── P1-06-internet-and-dns-working.png# Internet & DNS validation
 └── notes.md
 
-🔹 Phase 2 – Networking & Connectivity
+📝 Outcome
+
+FortiGate VM is fully operational, reachable via console, correctly networked, and ready for advanced firewall and routing configuration in Phase 2.
+
+🌐 Phase 2 – Networking & Connectivity
 Objectives
 
 Configure WAN and LAN interfaces
 
-Establish routing and NAT
+Enable routing and NAT
 
-Enable end-to-end internet connectivity
+Establish internet access for LAN clients
 
-Validate Linux client access through firewall
+Validate end-to-end connectivity
 
-FortiGate Configuration
+FortiGate Configuration Summary
 
 Interfaces
 
-port1 (WAN): DHCP
+port1 (WAN): DHCP (VirtualBox NAT)
 
 port2 (LAN): 192.168.56.1/24
 
@@ -96,11 +108,11 @@ Routing
 
 Default route via WAN gateway
 
-Directly connected LAN route
+LAN subnet directly connected
 
 Firewall Policy
 
-Source: LAN → Destination: WAN
+LAN → WAN
 
 Service: ALL
 
@@ -110,21 +122,21 @@ Ubuntu Server Configuration
 
 enp0s3: DHCP (NAT)
 
-enp0s8: Static LAN IP 192.168.56.10/24
+enp0s8: Static IP 192.168.56.10/24
 
-Default route via FortiGate LAN IP
+Default route via FortiGate LAN
 
-DNS configured explicitly
+DNS explicitly configured
 
-Validation Tests
+Validation Performed
 
-Ping FortiGate LAN
+Ping FortiGate LAN interface
 
 Ping public IP (8.8.8.8)
 
 DNS resolution (google.com)
 
-HTTP/HTTPS connectivity
+HTTP/HTTPS connectivity tests
 
 📁 Evidence:
 
@@ -137,29 +149,29 @@ phase-2-networking/
 ├── P2-06-ubuntu-connectivity-tests.png
 └── notes.md
 
-🔹 Phase 3 – Secure Management Access
+🔐 Phase 3 – Secure Management Access
 Objectives
 
-Enable secure SSH management
+Enable secure SSH access
 
-Restrict management plane exposure
+Validate access paths
 
-Validate access paths from different hosts
+Demonstrate controlled management exposure
 
-Access Scenarios
+Access Validation
 Source	Method	Result
-Ubuntu Server (LAN)	SSH to 192.168.56.1	✅ Allowed
-Windows Host (Direct)	SSH to 192.168.56.1	❌ Blocked
-Windows Host	SSH via NAT Port Forwarding	✅ Allowed
-Security Design Decisions
+Ubuntu Server	SSH → FortiGate LAN IP	✅ Success
+Windows Host	Direct SSH → LAN IP	❌ Blocked
+Windows Host	SSH via NAT Port Forwarding	✅ Success
+Security Design
 
 SSH enabled only on LAN interface
 
-No direct SSH exposure on WAN
+No direct WAN management access
 
 Windows access allowed only via controlled port forwarding
 
-Mirrors real enterprise firewall hardening practices
+Follows enterprise firewall best practices
 
 📁 Evidence:
 
@@ -168,38 +180,23 @@ phase-3-management-access/
 ├── P3-02-ssh-from-windows.png
 └── notes.md
 
-🛠️ Troubleshooting
+🔎 Troubleshooting (Inline)
 
-Common issues and resolutions are documented, including:
+During the lab, several real-world issues were identified and resolved:
 
-Console display not showing login
+Console login not visible (display adapter fix)
 
-FortiGate license warnings
+License warnings in free mode
 
-Netplan routing conflicts
+Netplan default route conflicts
 
-DNS resolution failures
+DNS resolution inconsistencies
 
-SSH access restrictions
+SSH access scope validation
 
-📁 Reference:
+All troubleshooting steps and decisions are documented within each phase’s notes.md.
 
-troubleshooting/
-└── common-issues.md
-
-🔐 Security Highlights
-
-Segmented WAN / LAN architecture
-
-NAT-only outbound internet access
-
-Restricted management plane
-
-No direct WAN administrative exposure
-
-Bastion-style access pattern implemented
-
-📈 Skills Demonstrated
+🧠 Skills Demonstrated
 
 FortiGate firewall deployment
 
@@ -207,23 +204,11 @@ Interface, routing & NAT configuration
 
 Linux networking (Netplan)
 
-SSH hardening & access control
+Secure SSH management
 
 Virtualized enterprise lab design
 
-Real-world troubleshooting methodology
-
-🚀 Next Enhancements (Planned)
-
-Local-in policies hardening
-
-Admin profiles & RBAC
-
-Logging & monitoring (Syslog / SIEM)
-
-IPS / Security Profiles
-
-High Availability (HA) simulation
+Practical troubleshooting methodology
 
 👤 Author
 
