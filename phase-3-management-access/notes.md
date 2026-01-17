@@ -17,7 +17,7 @@ This confirms:
 - FortiGate administrative access is reachable from trusted internal networks
 - Local-in access policy is functioning as intended
 
-Screenshot: `P3-01-ssh-from-ubuntu.png`
+![VM](P3-01-ssh-from-ubuntu.png)
 
 ---
 
@@ -43,7 +43,7 @@ This demonstrates:
 - No direct exposure of FortiGate management plane to WAN
 - Secure administrative access without weakening firewall posture
 
-Screenshot: `P3-02-ssh-from-windows.png`
+![VM](P3-02-ssh-from-windows.png)
 
 ---
 
