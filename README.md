@@ -1,73 +1,63 @@
-# FortiGate Enterprise Firewall Lab (VirtualBox)
+# FortiGate Enterprise Networking Lab (FortiGate VM64)
 
 ## Overview
-This project demonstrates the deployment and configuration of a FortiGate VM firewall
-in a simulated enterprise environment using VirtualBox.
+This lab demonstrates enterprise-style FortiGate firewall deployment using FortiGate VM64 with Ubuntu Server acting as a LAN host and management jump box.
 
-The lab covers WAN/LAN routing, NAT, firewall policies, SSH management access,
-and troubleshooting of real-world networking issues.
-
----
-
-## Lab Architecture
-
-- **FortiGate VM**
-  - port1 (WAN): DHCP via NAT
-  - port2 (LAN): 192.168.56.1/24
-
-- **Ubuntu Server (Jump Host)**
-  - enp0s3 (WAN/NAT): DHCP
-  - enp0s8 (LAN): 192.168.56.10/24
-
-- **Windows Host**
-  - SSH access via port forwarding
+Key objectives:
+- WAN/LAN interface configuration
+- Static routing and default gateway design
+- Firewall policy with NAT
+- Secure SSH management access
+- Real-world troubleshooting (routing & DNS conflicts)
 
 ---
 
-## Phase 1 – FortiGate Deployment
-- Imported FortiGate VM into VirtualBox
-- Console login and password initialization
-- Resource tuning for evaluation license compliance
+## Architecture
+![Network Diagram](architecture/network-diagram.png)
 
 ---
 
-## Phase 2 – Network Configuration
-- WAN interface configured via DHCP
-- LAN interface configured with static IP
-- Default route via WAN
-- LAN → WAN firewall policy with NAT enabled
-- Ubuntu netplan configured for dual-homed routing
-- Internet connectivity validated (ICMP, DNS, HTTPS)
+## Phase 1 – Environment Setup
+- Imported FortiGate VM64 into VirtualBox
+- Deployed Ubuntu Server with hardened SSH
+- Verified base connectivity and DNS
+
+📁 Screenshots: `phase-1-setup/`
+
+---
+
+## Phase 2 – Networking & Firewall
+- Configured WAN (DHCP) and LAN (static)
+- Implemented default route
+- Created LAN-to-WAN firewall policy with NAT
+- Configured Ubuntu netplan with dual NIC routing
+- Validated end-to-end connectivity
+
+📁 Screenshots: `phase-2-networking/`
 
 ---
 
 ## Phase 3 – Management Access
-- SSH access from Ubuntu jump host
-- SSH access from Windows via port forwarding
-- Verified secure administrative access paths
+- Enabled SSH on FortiGate
+- Accessed FortiGate from Ubuntu (LAN)
+- Accessed FortiGate from Windows host via port forwarding
+
+📁 Screenshots: `phase-3-management-access/`
 
 ---
 
 ## Troubleshooting Highlights
-- Resolved console display issue by switching to VMSVGA
-- Fixed Ubuntu routing conflicts using netplan overrides
-- Diagnosed DNS resolution vs ICMP behavior
-- Validated FortiGate routing and policy order
+- Resolved DNS failures caused by multiple default routes
+- Fixed routing precedence using netplan overrides
+- Validated traffic flow using ICMP, curl, and nslookup
+
+📁 Details: `troubleshooting/common-issues.md`
 
 ---
 
 ## Skills Demonstrated
-- FortiGate firewall configuration (CLI)
-- Network routing & NAT
-- Linux networking (netplan, routing, DNS)
-- VirtualBox networking (NAT, Host-only, port forwarding)
-- Troubleshooting enterprise network issues
-- Secure remote administration (SSH)
-
----
-
-## Future Enhancements
-- GUI access hardening
-- Local-in policy restrictions
-- IPS / Web Filtering
-- Logging & monitoring
+- FortiGate firewall administration
+- Network routing and NAT
+- Linux networking (netplan, routing tables)
+- Secure remote management (SSH)
+- Enterprise-style troubleshooting
